@@ -1,0 +1,155 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL para pruebas E2E
+  postgres-e2e:
+    image: postgres:15-alpine
+    container_name: compete-zone-db-e2e
+    environment:
+      POSTGRES_DB: ${DB_NAME:-competezone_e2e}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    ports:
+      - "${DB_PORT:-5434}:5432"
+    volumes:
+      - postgres_e2e_data:/var/lib/postgresql/data
+      - ../compete-zone-api/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./fixtures/init-e2e-data.sql:/docker-entrypoint-initdb.d/02-init-e2e-data.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - compete-zone-e2e-network
+
+  # Backend API (Spring Boot) para pruebas E2E
+  api-e2e:
+    build:
+      context: ../compete-zone-api
+      dockerfile: Dockerfile.dev
+    container_name: compete-zone-api-e2e
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-e2e:5432/competezone_e2e
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+      - SPRING_JPA_SHOW_SQL=false
+      - JWT_SECRET=mySecretKeyForE2ETestingOnly123456789012345678901234567890
+      - MEDIA_ROOT=/app/media-uploads-e2e
+      - MEDIA_BASE_PUBLIC_URL=http://localhost:8081/u
+      - MEDIA_MAX_MB=10
+      - LOGGING_LEVEL_COM_COMPETEZONE=DEBUG
+    ports:
+      - "8081:8080"  # Puerto diferente para evitar conflictos
+      - "5006:5005"  # Puerto para debug
+    volumes:
+      - ../compete-zone-api/src:/app/src:rw
+      - ../compete-zone-api/pom.xml:/app/pom.xml:ro
+      - maven_cache_e2e:/root/.m2
+      - ./volumes/media-uploads-e2e:/app/media-uploads-e2e:rw
+    depends_on:
+      postgres-e2e:
+        condition: service_healthy
+    networks:
+      - compete-zone-e2e-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend (React + Vite) para pruebas E2E
+  frontend-e2e:
+    build:
+      context: ../compete-zone/compete-zone
+      dockerfile: Dockerfile.dev
+    container_name: compete-zone-frontend-e2e
+    environment:
+      - VITE_API_URL=${API_URL:-http://localhost:8081}
+      - VITE_USE_REAL_API=true
+      - VITE_FORCE_DEV=false
+      - NODE_ENV=test
+    ports:
+      - "5174:5173"  # Puerto diferente para evitar conflictos
+    volumes:
+      - ../compete-zone/compete-zone/src:/app/src:rw
+      - ../compete-zone/compete-zone/public:/app/public:rw
+      - ../compete-zone/compete-zone/index.html:/app/index.html:rw
+      - ../compete-zone/compete-zone/package.json:/app/package.json:ro
+      - ../compete-zone/compete-zone/package-lock.json:/app/package-lock.json:ro
+      - ../compete-zone/compete-zone/vite.config.js:/app/vite.config.js:ro
+      - ../compete-zone/compete-zone/tailwind.config.js:/app/tailwind.config.js:ro
+      - ../compete-zone/compete-zone/postcss.config.js:/app/postcss.config.js:ro
+      - ../compete-zone/compete-zone/eslint.config.js:/app/eslint.config.js:ro
+      - node_modules_e2e:/app/node_modules
+    depends_on:
+      - api-e2e
+    networks:
+      - compete-zone-e2e-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5173"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Servicio de monitoreo para verificar que todos los servicios estén listos
+  wait-for-services:
+    image: busybox:latest
+    container_name: compete-zone-wait-e2e
+    depends_on:
+      - postgres-e2e
+      - api-e2e
+      - frontend-e2e
+    command: >
+      sh -c "
+        echo 'Esperando que todos los servicios estén listos...' &&
+        until wget --quiet --tries=1 --spider http://postgres-e2e:5432; do
+          echo 'Esperando PostgreSQL...'
+          sleep 2
+        done &&
+        until wget --quiet --tries=1 --spider http://api-e2e:8080/actuator/health; do
+          echo 'Esperando API...'
+          sleep 2
+        done &&
+        until wget --quiet --tries=1 --spider http://frontend-e2e:5173; do
+          echo 'Esperando Frontend...'
+          sleep 2
+        done &&
+        echo 'Todos los servicios están listos!'
+      "
+    networks:
+      - compete-zone-e2e-network
+
+  # Dozzle - Monitor de logs en tiempo real
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: compete-zone-dozzle-e2e
+    ports:
+      - "8085:8080"  # Puerto para acceder a Dozzle
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - DOZZLE_LEVEL=info
+      - DOZZLE_TAILSIZE=300
+      - DOZZLE_FILTER=compete-zone-e2e
+    networks:
+      - compete-zone-e2e-network
+    restart: unless-stopped
+
+volumes:
+  postgres_e2e_data:
+    driver: local
+  maven_cache_e2e:
+    driver: local
+  node_modules_e2e:
+    driver: local
+
+networks:
+  compete-zone-e2e-network:
+    driver: bridge
+    name: compete-zone-e2e-network

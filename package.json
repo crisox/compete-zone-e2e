@@ -1,0 +1,74 @@
+{
+  "name": "compete-zone-e2e",
+  "version": "1.0.0",
+  "description": "End-to-End Testing Suite for CompeteZone",
+  "main": "index.js",
+  "scripts": {
+    "install:browsers": "playwright install --with-deps",
+    "setup:services": "docker-compose -f docker-compose.e2e.yml up -d",
+    "dev:with-logs": "./scripts/dev-with-logs.sh",
+    "teardown:services": "docker-compose -f docker-compose.e2e.yml down -v",
+    "wait:services": "node scripts/wait-for-services.js",
+    "seed:data": "node scripts/seed-data.js",
+    "clean:data": "node scripts/clean-data.js",
+    "test:all": "playwright test",
+    "test:fast": "playwright test --workers=8 --timeout=30000",
+    "test:aggressive": "playwright test --workers=12 --timeout=20000 --reporter=list",
+    "test:ultra": "node scripts/run-aggressive-tests.js",
+    "test:e2e": "npm run setup:services && npm run wait:services && npm run seed:data && npm run test:all && npm run teardown:services",
+    "test:auth": "playwright test tests/e2e/auth/",
+    "test:events": "playwright test tests/e2e/events/",
+    "test:gyms": "playwright test tests/e2e/gyms/",
+    "test:athletes": "playwright test tests/e2e/athletes/",
+    "test:api": "playwright test tests/api/",
+    "test:ui": "playwright test tests/ui/",
+    "test:ci": "playwright test --reporter=html,junit",
+    "test:debug": "playwright test --headed --debug",
+    "test:trace": "playwright test --trace on",
+    "test:ui-mode": "playwright test --ui",
+    "report:show": "playwright show-report",
+    "report:open": "open reports/html/index.html",
+    "logs:services": "docker-compose -f docker-compose.e2e.yml logs -f",
+    "logs:playwright": "cat reports/playwright.log",
+    "logs:dozzle": "node scripts/open-dozzle.js",
+    "logs:dozzle:start": "docker-compose -f docker-compose.e2e.yml up -d dozzle",
+    "logs:dozzle:stop": "docker-compose -f docker-compose.e2e.yml stop dozzle",
+    "fixtures:generate": "node scripts/generate-fixtures.js",
+    "fixtures:validate": "node scripts/validate-fixtures.js",
+    "debug": "node scripts/debug-services.js",
+    "analyze": "node scripts/analyze-results.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "keywords": [
+    "e2e",
+    "testing",
+    "playwright",
+    "competezone",
+    "automation"
+  ],
+  "author": "CompeteZone Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-playwright": "^1.0.0",
+    "prettier": "^3.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.0",
+    "faker": "^6.6.6",
+    "pg": "^8.11.0",
+    "wait-on": "^7.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "playwright": {
+    "version": "1.40.0"
+  }
+}

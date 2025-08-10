@@ -1,0 +1,57 @@
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "email": "admin@competezone.test",
+    "password_hash": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+    "role": "ADMIN",
+    "name": "Admin Test",
+    "bio": "Administrador del sistema",
+    "location": "Madrid, España",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "email": "athlete@competezone.test",
+    "password_hash": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+    "role": "ATHLETE",
+    "name": "Athlete Test",
+    "bio": "Atleta de CrossFit apasionado",
+    "location": "Barcelona, España",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440003",
+    "email": "gym@competezone.test",
+    "password_hash": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+    "role": "GYM",
+    "name": "Gym Owner Test",
+    "bio": "Propietario de gimnasio",
+    "location": "Valencia, España",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440004",
+    "email": "athlete2@competezone.test",
+    "password_hash": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+    "role": "ATHLETE",
+    "name": "María García",
+    "bio": "Atleta principiante",
+    "location": "Sevilla, España",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440005",
+    "email": "gym2@competezone.test",
+    "password_hash": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+    "role": "GYM",
+    "name": "Carlos López",
+    "bio": "Entrenador certificado",
+    "location": "Bilbao, España",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  }
+]

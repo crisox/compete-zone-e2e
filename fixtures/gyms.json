@@ -1,0 +1,32 @@
+[
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440001",
+    "name": "CrossFit Madrid",
+    "description": "Gimnasio especializado en CrossFit con equipamiento de alta calidad",
+    "location_text": "Calle Gran Vía 123, Madrid",
+    "contact_phone": "+34 91 123 4567",
+    "owner_user_id": "550e8400-e29b-41d4-a716-446655440003",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440002",
+    "name": "PowerGym Barcelona",
+    "description": "Gimnasio de fuerza y musculación con ambiente profesional",
+    "location_text": "Avenida Diagonal 456, Barcelona",
+    "contact_phone": "+34 93 987 6543",
+    "owner_user_id": "550e8400-e29b-41d4-a716-446655440005",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440003",
+    "name": "Fitness Valencia",
+    "description": "Centro de fitness moderno con clases grupales y entrenamiento personal",
+    "location_text": "Plaza del Ayuntamiento 789, Valencia",
+    "contact_phone": "+34 96 555 1234",
+    "owner_user_id": "550e8400-e29b-41d4-a716-446655440003",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  }
+]

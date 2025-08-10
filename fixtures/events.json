@@ -1,0 +1,41 @@
+[
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440001",
+    "title": "CrossFit Competition Madrid",
+    "description": "Competición de CrossFit para todos los niveles. Incluye pruebas de fuerza, resistencia y agilidad.",
+    "date": "2025-03-15T09:00:00Z",
+    "time": "09:00:00",
+    "location_text": "CrossFit Madrid, Calle Gran Vía 123",
+    "max_participants": 50,
+    "registration_deadline": "2025-03-10T23:59:59Z",
+    "gym_id": "660e8400-e29b-41d4-a716-446655440001",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440002",
+    "title": "Powerlifting Meet Barcelona",
+    "description": "Competición de powerlifting con categorías por peso y edad. Squat, bench press y deadlift.",
+    "date": "2025-04-20T10:00:00Z",
+    "time": "10:00:00",
+    "location_text": "PowerGym Barcelona, Avenida Diagonal 456",
+    "max_participants": 30,
+    "registration_deadline": "2025-04-15T23:59:59Z",
+    "gym_id": "660e8400-e29b-41d4-a716-446655440002",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440003",
+    "title": "Fitness Challenge Valencia",
+    "description": "Desafío de fitness con múltiples estaciones. Ideal para principiantes y avanzados.",
+    "date": "2025-05-10T08:00:00Z",
+    "time": "08:00:00",
+    "location_text": "Fitness Valencia, Plaza del Ayuntamiento 789",
+    "max_participants": 40,
+    "registration_deadline": "2025-05-05T23:59:59Z",
+    "gym_id": "660e8400-e29b-41d4-a716-446655440003",
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
+  }
+]
