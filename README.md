@@ -68,7 +68,7 @@ cp .env.example .env
 
 ### Configuración del Entorno
 
-1. **Variables de Entorno** (`.env`):
+**Variables de Entorno** (`.env`):
 ```env
 # Servicios
 API_URL=http://localhost:8080
@@ -137,7 +137,9 @@ npx playwright install --with-deps
 npm run test:ci
 ```
 
-## 📊 Reportes
+## 📊 Reportes y Monitoreo
+
+### Reportes de Pruebas
 
 Los reportes se generan automáticamente en `reports/`:
 
@@ -146,7 +148,37 @@ Los reportes se generan automáticamente en `reports/`:
 - **Videos**: `reports/videos/`
 - **Screenshots**: `reports/screenshots/`
 
-## 🔧 Mantenimiento
+### 📊 Dozzle - Monitor de Logs en Tiempo Real
+
+Dozzle proporciona una interfaz web para monitorear logs de todos los contenedores:
+
+- **URL**: http://localhost:8085
+- **Características**:
+  - Logs en tiempo real de todos los servicios
+  - Filtrado por contenedor
+  - Búsqueda en logs
+  - Interfaz web intuitiva
+  - Actualización automática
+
+**Comandos de Logs**:
+```bash
+# Ver logs de servicios
+npm run logs:services
+
+# Ver logs de Playwright
+npm run logs:playwright
+
+# Abrir Dozzle
+npm run logs:dozzle
+
+# Iniciar solo Dozzle
+npm run logs:dozzle:start
+
+# Detener Dozzle
+npm run logs:dozzle:stop
+```
+
+## 🔧 Mantenimiento y Debugging
 
 ### Agregar Nuevas Pruebas
 
@@ -185,48 +217,6 @@ npx playwright show-report
 1. **Servicios no inician**: Verificar puertos disponibles
 2. **Base de datos no conecta**: Verificar credenciales en `.env`
 3. **Pruebas fallan**: Verificar datos de prueba en `fixtures/`
-
-### Logs
-
-```bash
-# Ver logs de servicios
-npm run logs:services
-
-# Ver logs de Playwright
-npm run logs:playwright
-
-# Abrir Dozzle (monitor de logs en tiempo real)
-npm run logs:dozzle
-
-# Iniciar solo Dozzle
-npm run logs:dozzle:start
-
-# Detener Dozzle
-npm run logs:dozzle:stop
-```
-
-#### 📊 Dozzle - Monitor de Logs en Tiempo Real
-
-Dozzle proporciona una interfaz web para monitorear logs de todos los contenedores en tiempo real:
-
-- **URL**: http://localhost:8085
-- **Características**:
-  - Logs en tiempo real de todos los servicios
-  - Filtrado por contenedor
-  - Búsqueda en logs
-  - Interfaz web intuitiva
-  - Actualización automática
-
-**Uso**:
-```bash
-# Iniciar servicios con Dozzle
-npm run setup:services
-
-# Abrir Dozzle en el navegador
-npm run logs:dozzle
-
-# O acceder directamente a: http://localhost:8085
-```
 
 ## 📝 Casos de Uso Cubiertos
 

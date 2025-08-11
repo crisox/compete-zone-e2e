@@ -19,7 +19,7 @@ test.describe('Autenticación - Registro', () => {
     await expect(page.locator('select[name="role"]')).toHaveValue('athlete');
     
     // Verificar enlace de login (usar el del formulario)
-    await expect(page.getByRole('link', { name: 'Inicia sesión' })).toBeVisible();
+    await expect(page.getByRole('link', { name: /inicia sesión/i })).toBeVisible();
   });
 
   test('debería permitir registro con datos válidos', async ({ page }) => {
@@ -70,8 +70,17 @@ test.describe('Autenticación - Registro', () => {
     // Navegar a la página de registro
     await page.goto('/auth/registro');
     
-    // Hacer clic en enlace de login (usar el del formulario)
-    await page.click('a[href="/auth/login"]', { hasText: 'Inicia sesión' });
+    // Esperar a que la página esté completamente cargada
+    await page.waitForLoadState('networkidle');
+    
+    // Buscar el enlace de login de forma más robusta
+    const loginLink = page.getByRole('link', { name: /inicia sesión/i });
+    
+    // Esperar a que el enlace sea visible y clickeable
+    await loginLink.waitFor({ state: 'visible', timeout: 10000 });
+    
+    // Hacer clic en el enlace
+    await loginLink.click();
     
     // Verificar redirección
     await expect(page).toHaveURL('/auth/login');
