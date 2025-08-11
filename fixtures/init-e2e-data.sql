@@ -14,9 +14,9 @@
 -- Insertar usuarios de prueba
 INSERT INTO users (id, email, password_hash, role, name, bio, location, created_at, updated_at)
 VALUES 
-  ('550e8400-e29b-41d4-a716-446655440001', 'admin@competezone.test', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ADMIN', 'Admin Test', 'Administrador del sistema', 'Madrid, España', NOW(), NOW()),
-  ('550e8400-e29b-41d4-a716-446655440002', 'athlete@competezone.test', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ATHLETE', 'Athlete Test', 'Atleta de CrossFit apasionado', 'Barcelona, España', NOW(), NOW()),
-  ('550e8400-e29b-41d4-a716-446655440003', 'gym@competezone.test', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'GYM', 'Gym Owner Test', 'Propietario de gimnasio', 'Valencia, España', NOW(), NOW()),
+  ('550e8400-e29b-41d4-a716-446655440001', 'admin@dev.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ADMIN', 'Admin Test', 'Administrador del sistema', 'Madrid, España', NOW(), NOW()),
+  ('550e8400-e29b-41d4-a716-446655440002', 'atleta@dev.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ATHLETE', 'Athlete Test', 'Atleta de CrossFit apasionado', 'Barcelona, España', NOW(), NOW()),
+  ('550e8400-e29b-41d4-a716-446655440003', 'gimnasio@dev.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'GYM', 'Gym Owner Test', 'Propietario de gimnasio', 'Valencia, España', NOW(), NOW()),
   ('550e8400-e29b-41d4-a716-446655440004', 'athlete2@competezone.test', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ATHLETE', 'María García', 'Atleta principiante', 'Sevilla, España', NOW(), NOW()),
   ('550e8400-e29b-41d4-a716-446655440005', 'gym2@competezone.test', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'GYM', 'Carlos López', 'Entrenador certificado', 'Bilbao, España', NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET

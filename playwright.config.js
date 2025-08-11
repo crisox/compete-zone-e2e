@@ -24,7 +24,7 @@ module.exports = defineConfig({
   /* Directorio compartido para archivos de test */
   use: {
     /* Base URL para usar en acciones como `await page.goto('/')` */
-    baseURL: process.env.FRONTEND_URL || 'http://localhost:5174',
+    baseURL: process.env.FRONTEND_URL || 'http://localhost:5175',
     
              /* Configuración de trazas y media OPTIMIZADA */
          trace: 'off', // Desactivado para máxima velocidad
@@ -104,14 +104,14 @@ module.exports = defineConfig({
   /* Configuración para CI */
   ...(process.env.CI && {
     use: {
-      baseURL: process.env.FRONTEND_URL || 'http://localhost:5174',
+      baseURL: process.env.FRONTEND_URL || 'http://localhost:5175',
     },
   }),
 
            /* Configuración de webServer OPTIMIZADA */
          webServer: process.env.NODE_ENV === 'development' ? {
            command: 'npm run dev',
-           url: 'http://localhost:5174',
+           url: 'http://localhost:5175',
            reuseExistingServer: !process.env.CI,
            timeout: 60 * 1000, // Reducido para inicio más rápido
          } : undefined,

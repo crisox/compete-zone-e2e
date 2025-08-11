@@ -30,7 +30,7 @@ async function globalSetup() {
     const page = await browser.newPage();
     
     try {
-      await page.goto(process.env.FRONTEND_URL || 'http://localhost:5174');
+      await page.goto(process.env.FRONTEND_URL || 'http://localhost:5175');
       await page.waitForLoadState('networkidle');
       
       // Verificar que la página cargue correctamente
@@ -48,7 +48,7 @@ async function globalSetup() {
     const { default: axios } = require('axios');
     
     try {
-      const response = await axios.get(`${process.env.API_URL || 'http://localhost:8081'}/actuator/health`, {
+      const response = await axios.get(`${process.env.API_URL || 'http://localhost:8082'}/actuator/health`, {
         timeout: 10000
       });
       

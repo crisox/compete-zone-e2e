@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_INITDB_ARGS: "--encoding=UTF8"
     ports:
-      - "${DB_PORT:-5434}:5432"
+      - "${DB_PORT:-5435}:5432"
     volumes:
       - postgres_e2e_data:/var/lib/postgresql/data
       - ../compete-zone-api/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
@@ -43,8 +43,8 @@ services:
       - MEDIA_MAX_MB=10
       - LOGGING_LEVEL_COM_COMPETEZONE=DEBUG
     ports:
-      - "8081:8080"  # Puerto diferente para evitar conflictos
-      - "5006:5005"  # Puerto para debug
+      - "8082:8080"  # Puerto diferente para evitar conflictos
+      - "5007:5005"  # Puerto para debug
     volumes:
       - ../compete-zone-api/src:/app/src:rw
       - ../compete-zone-api/pom.xml:/app/pom.xml:ro
@@ -65,7 +65,7 @@ services:
   # Frontend (React + Vite) para pruebas E2E
   frontend-e2e:
     build:
-      context: ../compete-zone/compete-zone
+      context: ../compete-zone
       dockerfile: Dockerfile.dev
     container_name: compete-zone-frontend-e2e
     environment:
@@ -74,17 +74,17 @@ services:
       - VITE_FORCE_DEV=false
       - NODE_ENV=test
     ports:
-      - "5174:5173"  # Puerto diferente para evitar conflictos
+      - "5175:5173"  # Puerto diferente para evitar conflictos
     volumes:
-      - ../compete-zone/compete-zone/src:/app/src:rw
-      - ../compete-zone/compete-zone/public:/app/public:rw
-      - ../compete-zone/compete-zone/index.html:/app/index.html:rw
-      - ../compete-zone/compete-zone/package.json:/app/package.json:ro
-      - ../compete-zone/compete-zone/package-lock.json:/app/package-lock.json:ro
-      - ../compete-zone/compete-zone/vite.config.js:/app/vite.config.js:ro
-      - ../compete-zone/compete-zone/tailwind.config.js:/app/tailwind.config.js:ro
-      - ../compete-zone/compete-zone/postcss.config.js:/app/postcss.config.js:ro
-      - ../compete-zone/compete-zone/eslint.config.js:/app/eslint.config.js:ro
+      - ../compete-zone/src:/app/src:rw
+      - ../compete-zone/public:/app/public:rw
+      - ../compete-zone/index.html:/app/index.html:rw
+      - ../compete-zone/package.json:/app/package.json:ro
+      - ../compete-zone/package-lock.json:/app/package-lock.json:ro
+      - ../compete-zone/vite.config.js:/app/vite.config.js:ro
+      - ../compete-zone/tailwind.config.js:/app/tailwind.config.js:ro
+      - ../compete-zone/postcss.config.js:/app/postcss.config.js:ro
+      - ../compete-zone/eslint.config.js:/app/eslint.config.js:ro
       - node_modules_e2e:/app/node_modules
     depends_on:
       - api-e2e
@@ -99,7 +99,7 @@ services:
 
   # Servicio de monitoreo para verificar que todos los servicios estén listos
   wait-for-services:
-    image: busybox:latest
+    image: postgres:15-alpine
     container_name: compete-zone-wait-e2e
     depends_on:
       - postgres-e2e
@@ -108,7 +108,7 @@ services:
     command: >
       sh -c "
         echo 'Esperando que todos los servicios estén listos...' &&
-        until wget --quiet --tries=1 --spider http://postgres-e2e:5432; do
+        until pg_isready -h postgres-e2e -p 5432 -U postgres; do
           echo 'Esperando PostgreSQL...'
           sleep 2
         done &&
@@ -130,7 +130,7 @@ services:
     image: amir20/dozzle:latest
     container_name: compete-zone-dozzle-e2e
     ports:
-      - "8085:8080"  # Puerto para acceder a Dozzle
+      - "8086:8080"  # Puerto para acceder a Dozzle (cambiado para evitar conflictos)
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:

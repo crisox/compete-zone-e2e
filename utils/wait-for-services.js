@@ -34,7 +34,7 @@ async function waitForPostgreSQL(maxRetries, retryInterval) {
   for (let i = 0; i < maxRetries; i++) {
     try {
       const { stdout } = await execAsync(
-        `pg_isready -h ${process.env.DB_HOST || 'localhost'} -p ${process.env.DB_PORT || '5434'} -U ${process.env.DB_USER || 'postgres'}`
+        `pg_isready -h ${process.env.DB_HOST || 'localhost'} -p ${process.env.DB_PORT || '5435'} -U ${process.env.DB_USER || 'postgres'}`
       );
       
       if (stdout.includes('accepting connections')) {
@@ -60,7 +60,7 @@ async function waitForPostgreSQL(maxRetries, retryInterval) {
 async function waitForAPI(maxRetries, retryInterval) {
   console.log('🔌 Esperando API...');
 
-  const apiUrl = process.env.API_URL || 'http://localhost:8081';
+  const apiUrl = process.env.API_URL || 'http://localhost:8082';
   const healthEndpoint = `${apiUrl}/actuator/health`;
 
   for (let i = 0; i < maxRetries; i++) {
@@ -93,7 +93,7 @@ async function waitForAPI(maxRetries, retryInterval) {
 async function waitForFrontend(maxRetries, retryInterval) {
   console.log('🌐 Esperando Frontend...');
 
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5174';
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5175';
 
   for (let i = 0; i < maxRetries; i++) {
     try {
@@ -140,7 +140,7 @@ async function checkServicesHealth() {
   try {
     // Verificar PostgreSQL
     const { stdout } = await execAsync(
-      `pg_isready -h ${process.env.DB_HOST || 'localhost'} -p ${process.env.DB_PORT || '5434'} -U ${process.env.DB_USER || 'postgres'}`
+      `pg_isready -h ${process.env.DB_HOST || 'localhost'} -p ${process.env.DB_PORT || '5435'} -U ${process.env.DB_USER || 'postgres'}`
     );
     health.postgres = stdout.includes('accepting connections');
   } catch (error) {
@@ -149,7 +149,7 @@ async function checkServicesHealth() {
 
   try {
     // Verificar API
-    const apiUrl = process.env.API_URL || 'http://localhost:8081';
+    const apiUrl = process.env.API_URL || 'http://localhost:8082';
     const response = await axios.get(`${apiUrl}/actuator/health`, { timeout: 5000 });
     health.api = response.status === 200;
   } catch (error) {
@@ -158,7 +158,7 @@ async function checkServicesHealth() {
 
   try {
     // Verificar Frontend
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5174';
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5175';
     const response = await axios.get(frontendUrl, { timeout: 5000 });
     health.frontend = response.status === 200;
   } catch (error) {
