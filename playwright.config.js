@@ -13,8 +13,8 @@ module.exports = defineConfig({
          forbidOnly: !!process.env.CI,
          /* Retry en CI si tienes tests flaky */
          retries: process.env.CI ? 2 : 0,
-         /* Configuración de workers para ejecución paralela AGRESIVA */
-         workers: process.env.CI ? 1 : 8, // 8 workers en desarrollo para máxima velocidad
+         /* Configuración de workers ultra-optimizada para Mac M3 Pro */
+         workers: process.env.CI ? 4 : 20, // 20 workers para máximo rendimiento en Mac M3 Pro
            /* Reporter para usar */
          reporter: [
            ['html', { outputFolder: 'playwright-report' }],
@@ -24,7 +24,7 @@ module.exports = defineConfig({
   /* Directorio compartido para archivos de test */
   use: {
     /* Base URL para usar en acciones como `await page.goto('/')` */
-    baseURL: process.env.FRONTEND_URL || 'http://localhost:5175',
+    baseURL: process.env.FRONTEND_URL || 'http://localhost:5173',
     
              /* Configuración de trazas y media OPTIMIZADA */
          trace: 'off', // Desactivado para máxima velocidad
@@ -35,9 +35,29 @@ module.exports = defineConfig({
          /* Videos desactivados para máxima velocidad */
          video: 'off',
     
-             /* Timeouts globales OPTIMIZADOS */
-         actionTimeout: 5000, // Reducido para acciones más rápidas
-         navigationTimeout: 15000, // Reducido para navegación más rápida
+             /* Timeouts globales ultra-optimizados para Mac M3 Pro */
+         actionTimeout: 8000, // Optimizado para Mac M3 Pro
+         navigationTimeout: 12000, // Reducido para navegación más rápida
+         
+         /* Optimizaciones específicas para macOS */
+         ...(process.platform === 'darwin' && {
+           launchOptions: {
+             args: [
+               '--disable-dev-shm-usage',
+               '--disable-web-security',
+               '--disable-features=VizDisplayCompositor',
+               '--no-sandbox',
+               '--disable-setuid-sandbox',
+               '--disable-background-timer-throttling',
+               '--disable-backgrounding-occluded-windows',
+               '--disable-renderer-backgrounding',
+               '--disable-field-trial-config',
+               '--disable-ipc-flooding-protection',
+               '--enable-automation',
+               '--disable-blink-features=AutomationControlled'
+             ]
+           }
+         })
   },
 
            /* Configurar proyectos para diferentes navegadores OPTIMIZADOS */
@@ -95,23 +115,23 @@ module.exports = defineConfig({
            /* Directorio de salida para archivos generados */
          outputDir: 'test-results/',
 
-           /* Configuración global de timeouts OPTIMIZADA */
-         timeout: 30000, // Reducido para tests más rápidos
+           /* Configuración global de timeouts ultra-optimizada para Mac M3 Pro */
+         timeout: 15000, // Reducido para feedback más rápido
          expect: {
-           timeout: 5000, // Reducido para assertions más rápidas
+           timeout: 8000, // Optimizado para Mac M3 Pro
          },
 
   /* Configuración para CI */
   ...(process.env.CI && {
     use: {
-      baseURL: process.env.FRONTEND_URL || 'http://localhost:5175',
+      baseURL: process.env.FRONTEND_URL || 'http://localhost:5173',
     },
   }),
 
            /* Configuración de webServer OPTIMIZADA */
-         webServer: process.env.NODE_ENV === 'development' ? {
+         webServer: process.env.NODE_ENV === 'development' && !process.env.DOCKER_TESTS ? {
            command: 'npm run dev',
-           url: 'http://localhost:5175',
+           url: 'http://localhost:5173',
            reuseExistingServer: !process.env.CI,
            timeout: 60 * 1000, // Reducido para inicio más rápido
          } : undefined,

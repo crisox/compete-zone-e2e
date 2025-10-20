@@ -54,7 +54,7 @@ async function generateFinalReport() {
       },
       services: {
         api: process.env.API_URL || 'http://localhost:8082',
-        frontend: process.env.FRONTEND_URL || 'http://localhost:5175',
+        frontend: process.env.FRONTEND_URL || 'http://localhost:5173',
         database: `${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || '5435'}`
       },
       cleanup: {

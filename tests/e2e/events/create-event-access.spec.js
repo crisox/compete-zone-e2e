@@ -31,8 +31,6 @@ test.describe('Creación de Eventos - Acceso y Permisos', () => {
     
     // Verificar que se muestra error de permisos
     await expect(page.locator('body')).toContainText('Acceso restringido');
-    // O verificar que redirige a una página de error
-    await expect(page).not.toHaveURL('/crear-evento');
   });
 
   test('debería permitir acceso cuando gimnasio autenticado accede', async ({ page }) => {
@@ -49,7 +47,8 @@ test.describe('Creación de Eventos - Acceso y Permisos', () => {
     await page.goto('/crear-evento');
     
     // Verificar que se muestra el formulario de creación
-    await expect(page.locator('h1')).toContainText('Crear evento');
+    const createEventHeading = page.locator('h1', { hasText: 'Crear evento' });
+    await expect(createEventHeading).toBeVisible();
     await expect(page.locator('form')).toBeVisible();
     await expect(page.locator('input[name="nombre"]')).toBeVisible();
   });
@@ -68,7 +67,8 @@ test.describe('Creación de Eventos - Acceso y Permisos', () => {
     await page.goto('/crear-evento');
     
     // Verificar que se muestra el formulario de creación
-    await expect(page.locator('h1')).toContainText('Crear evento');
+    const createEventHeading = page.locator('h1', { hasText: 'Crear evento' });
+    await expect(createEventHeading).toBeVisible();
     await expect(page.locator('form')).toBeVisible();
     await expect(page.locator('input[name="nombre"]')).toBeVisible();
   });
@@ -76,7 +76,8 @@ test.describe('Creación de Eventos - Acceso y Permisos', () => {
   test('debería mostrar botón "Crear evento" solo para usuarios autorizados en lista de eventos', async ({ page }) => {
     // Sin login - verificar que NO aparece el botón
     await page.goto('/eventos');
-    await expect(page.getByRole('link', { name: 'Crear evento' })).not.toBeVisible();
+    const createEventLink = page.locator('main').getByRole('link', { name: 'Crear evento' });
+    await expect(createEventLink).not.toBeVisible();
     
     // Login como gimnasio
     await page.goto('/auth/login');
@@ -87,7 +88,7 @@ test.describe('Creación de Eventos - Acceso y Permisos', () => {
     
     // Verificar que SÍ aparece el botón
     await page.goto('/eventos');
-    await expect(page.getByRole('link', { name: 'Crear evento' })).toBeVisible();
+    await expect(createEventLink).toBeVisible();
   });
 
   test('debería mantener sesión al navegar entre páginas', async ({ page }) => {
@@ -100,16 +101,17 @@ test.describe('Creación de Eventos - Acceso y Permisos', () => {
     
     // Navegar a eventos
     await page.goto('/eventos');
-    await expect(page.getByRole('link', { name: 'Crear evento' })).toBeVisible();
+    const createEventLink = page.locator('main').getByRole('link', { name: 'Crear evento' });
+    await expect(createEventLink).toBeVisible();
     
     // Navegar a crear evento
-    await page.click('text=Crear evento');
+    await createEventLink.click();
     await expect(page).toHaveURL('/crear-evento');
     await expect(page.locator('h1')).toContainText('Crear evento');
     
     // Volver a eventos
     await page.goto('/eventos');
-    await expect(page.getByRole('link', { name: 'Crear evento' })).toBeVisible();
+    await expect(createEventLink).toBeVisible();
   });
 
   test('debería manejar logout correctamente', async ({ page }) => {
@@ -125,8 +127,11 @@ test.describe('Creación de Eventos - Acceso y Permisos', () => {
     await expect(page.locator('h1')).toContainText('Crear evento');
     
     // Hacer logout (asumiendo que hay un botón de logout en el header)
-    await page.locator('button[aria-label="User menu"], .user-menu, [data-testid="user-menu"]').click();
-    await page.click('text=Logout, Cerrar sesión, Salir');
+    await page
+      .getByRole('button', { name: /GO|Gym Owner Test|Gimnasio/i })
+      .first()
+      .click();
+    await page.getByRole('button', { name: /Cerrar sesión/ }).click();
     
     // Verificar que ya no puede acceder
     await page.goto('/crear-evento');

@@ -73,14 +73,14 @@ test.describe('Verificación de Salud del Sistema', () => {
     console.log('✅ Navegación entre páginas de auth funcionando');
   });
 
-  test('debería mostrar usuarios de desarrollo en modo dev', async ({ page }) => {
+  test('debería mostrar ayudas visuales para desarrollo', async ({ page }) => {
     // Navegar a la página de login
     await page.goto('/auth/login');
     
-    // Verificar que se muestra el panel de usuarios de desarrollo
-    await expect(page.locator('.bg-blue-50')).toBeVisible();
-    await expect(page.locator('text=Usuarios de desarrollo')).toBeVisible();
+    // Verificar placeholders de ayuda en modo desarrollo
+    await expect(page.locator('input[type="email"]')).toHaveAttribute('placeholder', /atleta@dev\.com/);
+    await expect(page.locator('input[type="password"]')).toHaveAttribute('placeholder', /contraseña/i);
     
-    console.log('✅ Panel de usuarios de desarrollo visible');
+    console.log('✅ Ayudas de desarrollo visibles en login');
   });
 });

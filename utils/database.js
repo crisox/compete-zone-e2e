@@ -47,8 +47,9 @@ async function setupDatabase() {
     `);
 
     const expectedTables = [
-      'users', 'gyms', 'events', 'categories', 
-      'event_registrations', 'gym_reviews', 'refresh_tokens', 'media'
+      'users', 'events', 'categories',
+      'event_registrations', 'refresh_tokens', 'media',
+      'event_agenda_items', 'event_categories', 'event_results', 'event_leaderboard_cache'
     ];
 
     const existingTables = tablesResult.rows.map(row => row.table_name);
@@ -80,9 +81,8 @@ async function seedTestData() {
     const usersData = await loadFixture('users.json');
     await seedUsers(client, usersData);
 
-    // Cargar gimnasios de prueba
-    const gymsData = await loadFixture('gyms.json');
-    await seedGyms(client, gymsData);
+    // Nota: Los gimnasios ahora se representan como usuarios con rol GYM
+    // No se necesita carga separada de gimnasios
 
     // Cargar eventos de prueba
     const eventsData = await loadFixture('events.json');
@@ -115,9 +115,13 @@ async function loadFixture(filename) {
  */
 async function seedUsers(client, usersData) {
   for (const user of usersData) {
+    const createdAt = user.created_at ? new Date(user.created_at) : new Date('2024-01-01T00:00:00Z');
+    const updatedAt = user.updated_at ? new Date(user.updated_at) : createdAt;
+    const role = (user.role || 'ATHLETE').toUpperCase();
+
     await client.query(`
       INSERT INTO users (id, email, password_hash, role, name, bio, location, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       ON CONFLICT (id) DO UPDATE SET
         email = EXCLUDED.email,
         password_hash = EXCLUDED.password_hash,
@@ -125,59 +129,51 @@ async function seedUsers(client, usersData) {
         name = EXCLUDED.name,
         bio = EXCLUDED.bio,
         location = EXCLUDED.location,
-        updated_at = NOW()
+        created_at = EXCLUDED.created_at,
+        updated_at = EXCLUDED.updated_at
     `, [
-      user.id, user.email, user.password_hash, user.role, 
-      user.name, user.bio, user.location
+      user.id,
+      user.email,
+      user.password_hash,
+      role,
+      user.name,
+      user.bio,
+      user.location,
+      createdAt,
+      updatedAt
     ]);
   }
 }
 
-/**
- * Carga gimnasios de prueba
- */
-async function seedGyms(client, gymsData) {
-  for (const gym of gymsData) {
-    await client.query(`
-      INSERT INTO gyms (id, name, description, location_text, contact_phone, owner_user_id, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
-      ON CONFLICT (id) DO UPDATE SET
-        name = EXCLUDED.name,
-        description = EXCLUDED.description,
-        location_text = EXCLUDED.location_text,
-        contact_phone = EXCLUDED.contact_phone,
-        owner_user_id = EXCLUDED.owner_user_id,
-        updated_at = NOW()
-    `, [
-      gym.id, gym.name, gym.description, gym.location_text, 
-      gym.contact_phone, gym.owner_user_id
-    ]);
-  }
-}
 
 /**
  * Carga eventos de prueba
  */
 async function seedEvents(client, eventsData) {
   for (const event of eventsData) {
+    const createdAt = event.created_at ? new Date(event.created_at) : new Date('2024-01-01T00:00:00Z');
+    const updatedAt = event.updated_at ? new Date(event.updated_at) : createdAt;
+
     await client.query(`
-      INSERT INTO events (id, title, description, date, "time", location_text, max_participants, 
-                         registration_deadline, gym_id, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
+      INSERT INTO events (id, organizer_user_id, title, description, date, "time", location_text, fee,
+                         max_participants, registration_deadline, created_at, updated_at)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       ON CONFLICT (id) DO UPDATE SET
+        organizer_user_id = EXCLUDED.organizer_user_id,
         title = EXCLUDED.title,
         description = EXCLUDED.description,
         date = EXCLUDED.date,
         "time" = EXCLUDED."time",
         location_text = EXCLUDED.location_text,
+        fee = EXCLUDED.fee,
         max_participants = EXCLUDED.max_participants,
         registration_deadline = EXCLUDED.registration_deadline,
-        gym_id = EXCLUDED.gym_id,
-        updated_at = NOW()
+        created_at = EXCLUDED.created_at,
+        updated_at = EXCLUDED.updated_at
     `, [
-      event.id, event.title, event.description, event.date, event.time,
-      event.location_text, event.max_participants, 
-      event.registration_deadline, event.gym_id
+      event.id, event.organizer_user_id, event.title, event.description, event.date, event.time,
+      event.location_text, event.fee, event.max_participants,
+      event.registration_deadline, createdAt, updatedAt
     ]);
   }
 }
@@ -190,11 +186,12 @@ async function cleanupDatabase() {
 
   try {
     // Limpiar datos de prueba en orden inverso a las dependencias
+    await dbClient.query('DELETE FROM event_results WHERE recorded_at > NOW() - INTERVAL \'1 hour\'');
     await dbClient.query('DELETE FROM event_registrations WHERE registered_at > NOW() - INTERVAL \'1 hour\'');
-    await dbClient.query('DELETE FROM gym_reviews WHERE created_at > NOW() - INTERVAL \'1 hour\'');
+    await dbClient.query('DELETE FROM event_agenda_items WHERE created_at > NOW() - INTERVAL \'1 hour\'');
+    await dbClient.query('DELETE FROM event_categories WHERE event_id IN (SELECT id FROM events WHERE created_at > NOW() - INTERVAL \'1 hour\')');
     await dbClient.query('DELETE FROM media WHERE created_at > NOW() - INTERVAL \'1 hour\'');
     await dbClient.query('DELETE FROM events WHERE created_at > NOW() - INTERVAL \'1 hour\'');
-    await dbClient.query('DELETE FROM gyms WHERE created_at > NOW() - INTERVAL \'1 hour\'');
     await dbClient.query('DELETE FROM users WHERE created_at > NOW() - INTERVAL \'1 hour\'');
     await dbClient.query('DELETE FROM refresh_tokens WHERE created_at > NOW() - INTERVAL \'1 hour\'');
 

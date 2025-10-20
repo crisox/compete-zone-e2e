@@ -1,41 +1,50 @@
 [
   {
     "id": "770e8400-e29b-41d4-a716-446655440001",
-    "title": "CrossFit Competition Madrid",
-    "description": "Competición de CrossFit para todos los niveles. Incluye pruebas de fuerza, resistencia y agilidad.",
-    "date": "2025-03-15T09:00:00Z",
+    "organizer_user_id": "550e8400-e29b-41d4-a716-446655440003",
+    "title": "CrossFit Competition Madrid 2025",
+    "description": "Competición anual de CrossFit en Madrid con premios para los ganadores",
+    "date": "2025-06-15",
     "time": "09:00:00",
     "location_text": "CrossFit Madrid, Calle Gran Vía 123",
+    "fee": 25.00,
     "max_participants": 50,
-    "registration_deadline": "2025-03-10T23:59:59Z",
-    "gym_id": "660e8400-e29b-41d4-a716-446655440001",
-    "created_at": "2024-01-01T00:00:00Z",
-    "updated_at": "2024-01-01T00:00:00Z"
+    "registration_deadline": "2025-06-10"
   },
   {
     "id": "770e8400-e29b-41d4-a716-446655440002",
-    "title": "Powerlifting Meet Barcelona",
-    "description": "Competición de powerlifting con categorías por peso y edad. Squat, bench press y deadlift.",
-    "date": "2025-04-20T10:00:00Z",
+    "organizer_user_id": "550e8400-e29b-41d4-a716-446655440005",
+    "title": "Functional Training Challenge",
+    "description": "Desafío de entrenamiento funcional para todos los niveles",
+    "date": "2025-07-20",
     "time": "10:00:00",
     "location_text": "PowerGym Barcelona, Avenida Diagonal 456",
+    "fee": 15.00,
     "max_participants": 30,
-    "registration_deadline": "2025-04-15T23:59:59Z",
-    "gym_id": "660e8400-e29b-41d4-a716-446655440002",
-    "created_at": "2024-01-01T00:00:00Z",
-    "updated_at": "2024-01-01T00:00:00Z"
+    "registration_deadline": "2025-07-15"
   },
   {
     "id": "770e8400-e29b-41d4-a716-446655440003",
-    "title": "Fitness Challenge Valencia",
-    "description": "Desafío de fitness con múltiples estaciones. Ideal para principiantes y avanzados.",
-    "date": "2025-05-10T08:00:00Z",
-    "time": "08:00:00",
-    "location_text": "Fitness Valencia, Plaza del Ayuntamiento 789",
+    "organizer_user_id": "550e8400-e29b-41d4-a716-446655440003",
+    "title": "Valencia Fitness Open",
+    "description": "Competición abierta de fitness en Valencia",
+    "date": "2025-08-10",
+    "time": "08:30:00",
+    "location_text": "Fitness Valencia, Carrer de Colón 789",
+    "fee": 30.00,
     "max_participants": 40,
-    "registration_deadline": "2025-05-05T23:59:59Z",
-    "gym_id": "660e8400-e29b-41d4-a716-446655440003",
-    "created_at": "2024-01-01T00:00:00Z",
-    "updated_at": "2024-01-01T00:00:00Z"
+    "registration_deadline": "2025-08-05"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440004",
+    "organizer_user_id": "550e8400-e29b-41d4-a716-446655440003",
+    "title": "Beginner CrossFit Workshop",
+    "description": "Taller para principiantes de CrossFit",
+    "date": "2025-05-25",
+    "time": "14:00:00",
+    "location_text": "CrossFit Madrid, Calle Gran Vía 123",
+    "fee": 10.00,
+    "max_participants": 20,
+    "registration_deadline": "2025-05-20"
   }
 ]

@@ -70,7 +70,7 @@ fi
 print_success "Entorno de desarrollo iniciado!"
 echo ""
 echo "📊 Servicios disponibles:"
-echo "  • Frontend: http://localhost:5174"
+echo "  • Frontend: http://localhost:5173"
 echo "  • API: http://localhost:8081"
 echo "  • Base de datos: localhost:5434"
 echo "  • Dozzle (logs): http://localhost:8085"

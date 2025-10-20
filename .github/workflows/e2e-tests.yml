@@ -78,7 +78,7 @@ jobs:
       env:
         CI: true
         API_URL: http://localhost:8081
-        FRONTEND_URL: http://localhost:5174
+        FRONTEND_URL: http://localhost:5173
         DB_HOST: localhost
         DB_PORT: 5434
         DB_NAME: competezone_e2e

@@ -43,3 +43,40 @@ playwright.config.local.js
 
 # Archivos de datos de prueba generados
 fixtures/generated/
+
+# Secrets (CRITICAL - NEVER COMMIT)
+secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Additional test artifacts
+*.trace
+*.cpuprofile
+*.heapprofile
+
+# Coverage reports
+coverage/
+*.lcov
+.nyc_output
+
+# Cache directories
+.cache/
+.parcel-cache/
+.eslintcache
+.npm
+.yarn-integrity
+
+# Build outputs
+dist/
+build/
+.next/
+.nuxt/
+
+# Temporary files
+tmp/
+temp/
+*.pid
+*.seed
+*.lock

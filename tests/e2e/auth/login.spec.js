@@ -83,15 +83,15 @@ test.describe('Autenticación - Login', () => {
     await expect(page).toHaveURL('/auth/registro');
   });
 
-  test('debería mostrar usuarios de desarrollo en modo dev', async ({ page }) => {
+  test('debería mostrar ayudas para desarrollo en la página de login', async ({ page }) => {
     // Navegar a la página de login
     await page.goto('/auth/login');
     
-    // Verificar que se muestra el panel de usuarios de desarrollo
-    await expect(page.locator('.bg-blue-50')).toBeVisible();
-    await expect(page.locator('text=Usuarios de desarrollo')).toBeVisible();
-    await expect(page.locator('text=atleta@dev.com')).toBeVisible();
-    await expect(page.locator('text=gimnasio@dev.com')).toBeVisible();
-    await expect(page.locator('text=admin@dev.com')).toBeVisible();
+    // Verificar que los placeholders orientativos para desarrollo estén presentes
+    await expect(page.locator('input[type="email"]')).toHaveAttribute('placeholder', /atleta@dev\.com/);
+    await expect(page.locator('input[type="password"]')).toHaveAttribute('placeholder', /contraseña/i);
+    
+    // Verificar que la opción de Google esté disponible como ayuda adicional
+    await expect(page.getByRole('button', { name: /Iniciar sesión con Google/i })).toBeVisible();
   });
 });

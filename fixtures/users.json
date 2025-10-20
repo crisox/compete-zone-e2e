@@ -1,8 +1,8 @@
 [
   {
     "id": "550e8400-e29b-41d4-a716-446655440001",
-    "email": "admin@competezone.test",
-    "password_hash": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+    "email": "admin@dev.com",
+    "password_hash": "$2a$10$13gsVSmBDYlL7HN325G0VuUw4tHacRShGcmX4idwCCR5LQsQ8db0.",
     "role": "ADMIN",
     "name": "Admin Test",
     "bio": "Administrador del sistema",
@@ -12,8 +12,8 @@
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440002",
-    "email": "athlete@competezone.test",
-    "password_hash": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+    "email": "atleta@dev.com",
+    "password_hash": "$2a$10$13gsVSmBDYlL7HN325G0VuUw4tHacRShGcmX4idwCCR5LQsQ8db0.",
     "role": "ATHLETE",
     "name": "Athlete Test",
     "bio": "Atleta de CrossFit apasionado",
@@ -23,8 +23,8 @@
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440003",
-    "email": "gym@competezone.test",
-    "password_hash": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+    "email": "gimnasio@dev.com",
+    "password_hash": "$2a$10$13gsVSmBDYlL7HN325G0VuUw4tHacRShGcmX4idwCCR5LQsQ8db0.",
     "role": "GYM",
     "name": "Gym Owner Test",
     "bio": "Propietario de gimnasio",
@@ -35,7 +35,7 @@
   {
     "id": "550e8400-e29b-41d4-a716-446655440004",
     "email": "athlete2@competezone.test",
-    "password_hash": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+    "password_hash": "$2a$10$13gsVSmBDYlL7HN325G0VuUw4tHacRShGcmX4idwCCR5LQsQ8db0.",
     "role": "ATHLETE",
     "name": "María García",
     "bio": "Atleta principiante",
@@ -46,7 +46,7 @@
   {
     "id": "550e8400-e29b-41d4-a716-446655440005",
     "email": "gym2@competezone.test",
-    "password_hash": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+    "password_hash": "$2a$10$13gsVSmBDYlL7HN325G0VuUw4tHacRShGcmX4idwCCR5LQsQ8db0.",
     "role": "GYM",
     "name": "Carlos López",
     "bio": "Entrenador certificado",

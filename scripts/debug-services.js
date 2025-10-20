@@ -55,7 +55,7 @@ async function debugServices() {
   
   // Frontend
   try {
-    const response = await axios.get('http://localhost:5174', {
+    const response = await axios.get('http://localhost:5173', {
       timeout: 3000
     });
     console.log(`✅ Frontend: Respondiendo (Status: ${response.status})`);
@@ -68,7 +68,7 @@ async function debugServices() {
   // 4. Verificar puertos en uso
   console.log('🔌 Puertos en uso:');
   try {
-    const { stdout } = await execAsync('lsof -i :5433,8081,5174 | head -10');
+    const { stdout } = await execAsync('lsof -i :5433,8081,5173 | head -10');
     console.log(stdout || 'No se encontraron procesos en los puertos especificados');
   } catch (error) {
     console.log('No se pudo verificar puertos en uso');

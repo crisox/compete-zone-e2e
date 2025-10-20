@@ -8,21 +8,33 @@ services:
     environment:
       POSTGRES_DB: ${DB_NAME:-competezone_e2e}
       POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
       POSTGRES_INITDB_ARGS: "--encoding=UTF8"
     ports:
       - "${DB_PORT:-5435}:5432"
     volumes:
       - postgres_e2e_data:/var/lib/postgresql/data
-      - ../compete-zone-api/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ../compete-zone-api/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
       - ./fixtures/init-e2e-data.sql:/docker-entrypoint-initdb.d/02-init-e2e-data.sql:ro
+    secrets:
+      - db_password
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-competezone_e2e}"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
     networks:
       - compete-zone-e2e-network
+    restart: unless-stopped
 
   # Backend API (Spring Boot) para pruebas E2E
   api-e2e:
@@ -33,14 +45,14 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-e2e:5432/competezone_e2e
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-postgres}
+      - SPRING_DATASOURCE_PASSWORD_FILE=/run/secrets/db_password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
       - SPRING_JPA_SHOW_SQL=false
-      - JWT_SECRET=mySecretKeyForE2ETestingOnly123456789012345678901234567890
+      - JWT_SECRET_FILE=/run/secrets/jwt_secret
       - MEDIA_ROOT=/app/media-uploads-e2e
       - MEDIA_BASE_PUBLIC_URL=http://localhost:8081/u
-      - MEDIA_MAX_MB=10
+      - MEDIA_MAX_MB=${MEDIA_MAX_SIZE_MB:-10}
       - LOGGING_LEVEL_COM_COMPETEZONE=DEBUG
     ports:
       - "8082:8080"  # Puerto diferente para evitar conflictos
@@ -50,6 +62,9 @@ services:
       - ../compete-zone-api/pom.xml:/app/pom.xml:ro
       - maven_cache_e2e:/root/.m2
       - ./volumes/media-uploads-e2e:/app/media-uploads-e2e:rw
+    secrets:
+      - db_password
+      - jwt_secret
     depends_on:
       postgres-e2e:
         condition: service_healthy
@@ -61,6 +76,15 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
 
   # Frontend (React + Vite) para pruebas E2E
   frontend-e2e:
@@ -69,12 +93,12 @@ services:
       dockerfile: Dockerfile.dev
     container_name: compete-zone-frontend-e2e
     environment:
-      - VITE_API_URL=${API_URL:-http://localhost:8081}
+      - VITE_API_URL=http://api-e2e:8080
       - VITE_USE_REAL_API=true
       - VITE_FORCE_DEV=false
       - NODE_ENV=test
     ports:
-      - "5175:5173"  # Puerto diferente para evitar conflictos
+      - "5173:5173"  # Puerto diferente para evitar conflictos
     volumes:
       - ../compete-zone/src:/app/src:rw
       - ../compete-zone/public:/app/public:rw
@@ -135,8 +159,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       - DOZZLE_LEVEL=info
-      - DOZZLE_TAILSIZE=300
-      - DOZZLE_FILTER=compete-zone-e2e
+      - DOZZLE_FILTER=name=compete-zone-e2e
     networks:
       - compete-zone-e2e-network
     restart: unless-stopped
@@ -153,3 +176,9 @@ networks:
   compete-zone-e2e-network:
     driver: bridge
     name: compete-zone-e2e-network
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+  jwt_secret:
+    file: ./secrets/jwt_secret.txt

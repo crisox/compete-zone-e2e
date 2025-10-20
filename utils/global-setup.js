@@ -30,7 +30,7 @@ async function globalSetup() {
     const page = await browser.newPage();
     
     try {
-      await page.goto(process.env.FRONTEND_URL || 'http://localhost:5175');
+      await page.goto(process.env.FRONTEND_URL || 'http://localhost:5173');
       await page.waitForLoadState('networkidle');
       
       // Verificar que la página cargue correctamente
